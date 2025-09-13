@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>SQL Server Syntax Cheat Sheet - Page 1</title>
+
+		<!-- Prism.js Monokai Theme -->
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+			rel="stylesheet"
+		/>
+
+		<!-- External Stylesheet -->
+		<link rel="stylesheet" href="styles.css" />
+
+		<!-- External JavaScript -->
+		<script src="scripts.js" defer></script>
+	</head>
+	<body>
+		<div class="main-layout">
+			<!-- Left Sidebar Navigation -->
+			<aside class="sidebar">
+				<h3>📚 Sections</h3>
+				<ul class="sidebar-nav">
+					<li><a href="#database-ops">🏗️ Database Operations</a></li>
+					<li><a href="#table-ops">📦 Table Operations</a></li>
+					<li><a href="#constraints">🧩 Constraint Management</a></li>
+					<li><a href="#indexes">🔍 Index Operations</a></li>
+					<li><a href="#views">👁️ View Operations</a></li>
+				</ul>
+			</aside>
+
+			<!-- Right Sidebar for Pages -->
+			<aside class="right-sidebar">
+				<h4>📄 Pages</h4>
+				<a href="SQL-1.html" class="pagination-btn" disabled
+					>📋 Page 1: Structure</a
+				>
+				<a href="SQL-2.html" class="pagination-btn"
+					>🔍 Page 2: Queries</a
+				>
+			</aside>
+
+			<!-- Main Content -->
+			<div class="main-content">
+				<div class="sticky-header">
+					<div class="title-section">
+						<h1>SQL Server Syntax Cheat Sheet</h1>
+						<p>Database Structure & Management Operations</p>
+					</div>
+
+					<div class="toggle-container">
+						<button id="expandAllBtn" class="toggle-btn">
+							Expand All
+						</button>
+						<button id="collapseAllBtn" class="toggle-btn">
+							Collapse All
+						</button>
+					</div>
+				</div>
+
+				<div class="content-wrapper">
+					<details id="database-ops">
+						<summary>🏗️ Database Operations</summary>
+						<div class="sql-note">
+							<strong
+								>Essential database management commands for
+								creating, modifying, and removing
+								databases.</strong
+							>
+						</div>
+						<pre><code class="language-sql">
+-- Create Database
+CREATE DATABASE SampleDB;
+
+-- Create Database with specific settings
+CREATE DATABASE SampleDB
+ON PRIMARY (
+    NAME = 'SampleDB_Data',
+    FILENAME = 'C:\Data\SampleDB.mdf',
+    SIZE = 10MB,
+    MAXSIZE = 100MB,
+    FILEGROWTH = 5MB
+)
+LOG ON (
+    NAME = 'SampleDB_Log',
+    FILENAME = 'C:\Data\SampleDB.ldf',
+    SIZE = 5MB,
+    MAXSIZE = 50MB,
+    FILEGROWTH = 5MB
+);
+
+-- Alter Database
+ALTER DATABASE SampleDB
+    COLLATE SQL_Latin1_General_CP1_CI_AS;
+
+-- Drop Database
+DROP DATABASE SampleDB;
+
+-- Drop Database (force close connections)
+ALTER DATABASE SampleDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+DROP DATABASE SampleDB;
+    </code></pre>
+					</details>
+
+					<details id="table-ops">
+						<summary>📦 Table Operations</summary>
+						<div class="sql-note">
+							<strong
+								>Complete table lifecycle management including
+								creation, modification, and deletion.</strong
+							>
+						</div>
+						<pre><code class="language-sql">
+-- Create Table with various data types
+CREATE TABLE Employees (
+    EmployeeID INT IDENTITY(1,1) PRIMARY KEY,
+    FirstName NVARCHAR(50) NOT NULL,
+    LastName NVARCHAR(50) NOT NULL,
+    Email NVARCHAR(100) UNIQUE,
+    HireDate DATE DEFAULT GETDATE(),
+    Salary DECIMAL(10,2) CHECK (Salary >= 0),
+    DepartmentID INT,
+    ManagerID INT,
+    IsActive BIT DEFAULT 1,
+    CreatedDate DATETIME2 DEFAULT GETDATE(),
+    ModifiedDate DATETIME2 DEFAULT GETDATE()
+);
+
+-- Create Table with computed column
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY,
+    Name NVARCHAR(100),
+    Price DECIMAL(10,2),
+    TaxRate DECIMAL(3,2) DEFAULT 0.08,
+    TotalPrice AS (Price * (1 + TaxRate)) PERSISTED
+);
+
+-- Add Column
+ALTER TABLE Employees
+    ADD PhoneNumber NVARCHAR(20);
+
+-- Modify Column
+ALTER TABLE Employees
+    ALTER COLUMN FirstName NVARCHAR(100) NOT NULL;
+
+-- Drop Column
+ALTER TABLE Employees
+    DROP COLUMN PhoneNumber;
+
+-- Drop Table
+DROP TABLE Employees;
+
+-- Truncate Table (removes all data but keeps structure)
+TRUNCATE TABLE Employees;
+
+-- Rename Table
+EXEC sp_rename 'Employees', 'Staff';
+    </code></pre>
+					</details>
+
+					<details id="constraints">
+						<summary>🧩 Constraint Management</summary>
+						<div class="sql-note">
+							<strong
+								>Data integrity constraints ensure database
+								consistency and prevent invalid data
+								entry.</strong
+							>
+						</div>
+						<pre><code class="language-sql">
+-- PRIMARY KEY Constraint
+ALTER TABLE Employees
+    ADD CONSTRAINT PK_Employees
+    PRIMARY KEY (EmployeeID);
+
+-- FOREIGN KEY Constraint
+ALTER TABLE Orders
+    ADD CONSTRAINT FK_Orders_Employees
+    FOREIGN KEY (EmployeeID)
+    REFERENCES Employees(EmployeeID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+-- UNIQUE Constraint
+ALTER TABLE Employees
+    ADD CONSTRAINT UQ_Employees_Email
+    UNIQUE (Email);
+
+-- CHECK Constraint
+ALTER TABLE Employees
+    ADD CONSTRAINT CK_Salary_Range
+    CHECK (Salary BETWEEN 0 AND 1000000);
+
+-- DEFAULT Constraint
+ALTER TABLE Employees
+    ADD CONSTRAINT DF_HireDate
+    DEFAULT GETDATE()
+    FOR HireDate;
+
+-- Drop Constraint
+ALTER TABLE Employees
+    DROP CONSTRAINT CK_Salary_Range;
+
+-- Disable Constraint
+ALTER TABLE Employees
+    NOCHECK CONSTRAINT CK_Salary_Range;
+
+-- Enable Constraint
+ALTER TABLE Employees
+    CHECK CONSTRAINT CK_Salary_Range;
+
+-- Rename Constraint
+EXEC sp_rename 'Employees.CK_Salary_Range', 'CK_Employees_Salary', 'OBJECT';
+    </code></pre>
+					</details>
+
+					<details id="indexes">
+						<summary>🔍 Index Operations</summary>
+						<div class="sql-note">
+							<strong
+								>Indexes improve query performance but require
+								maintenance and storage space.</strong
+							>
+						</div>
+						<pre><code class="language-sql">
+-- Create Clustered Index
+CREATE CLUSTERED INDEX IX_Employees_LastName
+    ON Employees (LastName);
+
+-- Create Non-Clustered Index
+CREATE NONCLUSTERED INDEX IX_Employees_Department
+    ON Employees (DepartmentID)
+    INCLUDE (FirstName, LastName);
+
+-- Create Unique Index
+CREATE UNIQUE NONCLUSTERED INDEX IX_Employees_Email
+    ON Employees (Email);
+
+-- Create Composite Index
+CREATE NONCLUSTERED INDEX IX_Employees_Name
+    ON Employees (LastName, FirstName);
+
+-- Drop Index
+DROP INDEX IX_Employees_LastName ON Employees;
+
+-- Rebuild Index
+ALTER INDEX IX_Employees_LastName ON Employees REBUILD;
+
+-- Reorganize Index
+ALTER INDEX IX_Employees_LastName ON Employees REORGANIZE;
+
+-- View Index Information
+SELECT
+    i.name AS IndexName,
+    i.type_desc AS IndexType,
+    c.name AS ColumnName
+FROM sys.indexes i
+INNER JOIN sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = ic.index_id
+INNER JOIN sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id
+WHERE i.object_id = OBJECT_ID('Employees');
+    </code></pre>
+					</details>
+
+					<details id="views">
+						<summary>👁️ View Operations</summary>
+						<div class="sql-note">
+							<strong
+								>Views provide virtual tables based on SQL
+								queries, useful for security and
+								simplification.</strong
+							>
+						</div>
+						<pre><code class="language-sql">
+-- Create Simple View
+CREATE VIEW ActiveEmployees AS
+SELECT EmployeeID, FirstName, LastName, DepartmentID
+FROM Employees
+WHERE IsActive = 1;
+
+-- Create Complex View with JOIN
+CREATE VIEW EmployeeDetails AS
+SELECT
+    e.EmployeeID,
+    e.FirstName + ' ' + e.LastName AS FullName,
+    d.DepartmentName,
+    e.HireDate,
+    e.Salary
+FROM Employees e
+INNER JOIN Departments d ON e.DepartmentID = d.DepartmentID;
+
+-- Create Indexed View (requires SCHEMABINDING)
+CREATE VIEW SalesSummary
+WITH SCHEMABINDING
+AS
+SELECT
+    ProductID,
+    SUM(Quantity) AS TotalQuantity,
+    SUM(Amount) AS TotalAmount,
+    COUNT_BIG(*) AS Count
+FROM dbo.Sales
+GROUP BY ProductID;
+
+-- Create unique clustered index on view
+CREATE UNIQUE CLUSTERED INDEX IX_SalesSummary_ProductID
+    ON SalesSummary (ProductID);
+
+-- Alter View
+ALTER VIEW ActiveEmployees AS
+SELECT EmployeeID, FirstName, LastName, Email, DepartmentID
+FROM Employees
+WHERE IsActive = 1;
+
+-- Drop View
+DROP VIEW ActiveEmployees;
+
+-- View Metadata
+SELECT
+    v.name AS ViewName,
+    m.definition AS ViewDefinition
+FROM sys.views v
+INNER JOIN sys.sql_modules m ON v.object_id = m.object_id;
+    </code></pre>
+					</details>
+				</div>
+			</div>
+		</div>
+
+		<!-- Prism.js Scripts -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+	</body>
+</html>

@@ -1,0 +1,1131 @@
+/* Global reset to prevent overflow */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	overflow-x: hidden; /* Prevent hor/* Right sidebar for pages */
+.right-sidebar {
+	width: 200px; /* Balanced width - prevents wrapping, maximizes main content */
+	background-color: #2a2a2a;
+	border-left: 1px solid #444;
+	padding: 20px 15px; /* Compact padding for consistency */
+	position: fixed;
+	right: 0;
+	top: 60px; /* Offset to clear the fixed header */
+	height: calc(100vh - 60px); /* Adjust height to account for header */
+	overflow-y: auto;
+	z-index: 50;
+}
+
+/* SQL Cheat Sheet Styles */
+body {
+	font-family: "Zen Maru Gothic", sans-serif;
+	background-color: #1e1e1e;
+	color: #f8f8f2;
+	margin: 0;
+	padding: 0;
+	/* Expanded for better browser viewing, A4 for print */
+	max-width: 1600px; /* Increased for much better browser viewing */
+	margin-left: auto;
+	margin-right: auto;
+	position: relative; /* Ensure proper positioning context */
+}
+
+/* Sticky header container - Full width compact design */
+.sticky-header {
+	position: fixed; /* Changed to fixed for full width */
+	top: 0;
+	left: 0; /* Start from left edge */
+	right: 0; /* Extend to right edge */
+	/* Removed width: 100vw to prevent overflow */
+	background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+	padding: 12px 20px; /* Reduced padding */
+	z-index: 100;
+	border-bottom: 2px solid #a6e22e;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(10px);
+	display: flex; /* Flexbox for same-line layout */
+	align-items: center; /* Center align items vertically */
+	justify-content: space-between; /* Space between title and buttons */
+	flex-wrap: wrap; /* Allow wrapping on small screens */
+	gap: 15px; /* Gap between flex items */
+	box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.sticky-header::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(166, 226, 46, 0.03);
+	pointer-events: none;
+}
+
+/* Layout with sidebar */
+.main-layout {
+	display: flex;
+	min-height: 100vh;
+}
+
+.sidebar {
+	width: 300px; /* Balanced width - prevents wrapping, maximizes main content */
+	background-color: #2a2a2a;
+	border-right: 1px solid #444;
+	padding: 20px 15px; /* Reduced padding for more compact design */
+	position: fixed;
+	left: 0;
+	top: 60px; /* Offset to clear the fixed header */
+	height: calc(100vh - 60px); /* Adjust height to account for header */
+	overflow-y: auto;
+	z-index: 50;
+}
+
+.sidebar h3 {
+	color: #a6e22e;
+	font-size: 1.1em; /* Reduced for more compact design */
+	margin-bottom: 18px;
+	text-align: center;
+	border-bottom: 1px solid #444;
+	padding-bottom: 12px;
+}
+
+/* Add visual separator between sections */
+.sidebar-nav {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 20px 0; /* Reduced separation */
+	border-bottom: 1px solid #333;
+	padding-bottom: 15px;
+}
+
+.sidebar-nav li {
+	margin-bottom: 10px; /* Reduced spacing between items */
+}
+
+.sidebar-nav a {
+	color: #f8f8f2;
+	text-decoration: none;
+	display: block;
+	padding: 10px 12px; /* Reduced padding for compact design */
+	border-radius: 6px;
+	transition: all 0.3s ease;
+	font-size: 0.9em; /* Reduced font size for compact design */
+	border-left: 3px solid transparent;
+	line-height: 1.4; /* Adjusted line height */
+	font-weight: 500; /* Slightly bolder for better readability */
+}
+
+.sidebar-nav a:hover {
+	background-color: #3a3a3a;
+	color: #a6e22e;
+	border-left-color: #a6e22e;
+}
+
+.sidebar-nav a.active {
+	background-color: #2d5016;
+	color: #a6e22e;
+	border-left-color: #a6e22e;
+	font-weight: bold;
+}
+
+.pagination-section {
+	margin-top: 15px;
+	padding-top: 12px;
+	border-top: 1px solid #444;
+}
+
+.pagination-section h4 {
+	color: #e6db74;
+	font-size: 0.85em; /* Smaller font */
+	margin-bottom: 8px;
+	text-align: center;
+	font-weight: 600;
+}
+
+.pagination-btn {
+	display: block;
+	width: 100%;
+	padding: 8px 6px; /* Smaller padding */
+	margin-bottom: 6px; /* Tighter spacing */
+	background-color: #4b4b4b;
+	color: #e6db74;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: all 0.3s ease;
+	text-decoration: none;
+	text-align: center;
+	font-size: 0.75em; /* Smaller font */
+}
+
+.pagination-btn:hover {
+	background-color: #5a5a5a;
+	color: #a6e22e;
+}
+
+.pagination-btn:disabled {
+	background-color: #333;
+	color: #666;
+	cursor: not-allowed;
+}
+
+/* Right sidebar for pages */
+.right-sidebar {
+	width: 220px; /* Maximum width to prevent text wrapping */
+	background-color: #2a2a2a;
+	border-left: 1px solid #444;
+	padding: 35px 25px; /* Maximum padding for text comfort */
+	position: fixed;
+	right: 0;
+	top: 60px; /* Offset to clear the fixed header */
+	height: calc(100vh - 60px); /* Adjust height to account for header */
+	overflow-y: auto;
+	z-index: 50;
+}
+
+.right-sidebar h4 {
+	color: #e6db74;
+	font-size: 1.1em; /* Compact size for consistency */
+	margin-bottom: 20px;
+	text-align: center;
+	border-bottom: 1px solid #444;
+	padding-bottom: 15px;
+	font-weight: 600;
+}
+
+.right-sidebar .pagination-btn {
+	display: block;
+	width: 100%;
+	padding: 15px 12px; /* Maximum padding for comfort */
+	margin-bottom: 12px; /* Maximum spacing between buttons */
+	background-color: #4b4b4b;
+	color: #e6db74;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: all 0.3s ease;
+	text-decoration: none;
+	text-align: center;
+	font-size: 0.9em; /* Maximum font size for readability */
+	line-height: 1.6; /* Perfect line height */
+	font-weight: 600; /* Bolder for better readability */
+}
+
+.right-sidebar .pagination-btn:hover {
+	background-color: #5a5a5a;
+	color: #a6e22e;
+}
+
+.right-sidebar .pagination-btn:disabled {
+	background-color: #333;
+	color: #666;
+	cursor: not-allowed;
+}
+
+/* Main content area */
+.main-content {
+	flex: 1;
+	margin-left: 300px; /* Reduced to maximize main content width */
+	margin-right: 200px; /* Reduced to maximize main content width */
+	min-width: 400px; /* Increased minimum for better content readability */
+	padding: 0 50px; /* Enhanced padding for better content flow */
+	padding-top: 65px; /* Slightly increased to ensure proper header clearance */
+	box-sizing: border-box; /* Ensure padding is included in width calculations */
+	position: relative; /* Ensure proper positioning context */
+}
+
+h1 {
+	text-align: left; /* Changed from center to left for flex layout */
+	font-size: 1.5em; /* Made smaller */
+	font-weight: 700;
+	margin: 0; /* Removed margins for flex layout */
+	color: #a6e22e;
+	text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+	letter-spacing: 1px;
+	position: relative;
+	flex: 1; /* Allow title to take available space */
+	min-width: 200px; /* Minimum width for title */
+}
+
+/* Removed gradient line below title as requested */
+
+/* Title section for flex layout */
+.title-section {
+	flex: 1;
+	min-width: 200px;
+	position: relative;
+	padding-right: 15px;
+}
+
+.title-section h1 {
+	margin-bottom: 2px;
+}
+
+.title-section p {
+	position: static !important;
+	margin: 2px 0 0 0 !important;
+	font-size: 0.75em !important;
+	color: #66d9ef !important;
+	text-align: left !important;
+	width: auto !important;
+	top: auto !important;
+	left: auto !important;
+}
+
+details {
+	background-color: #2c2c2c;
+	border: 1px solid #444;
+	border-radius: 5px;
+	margin-bottom: 12px;
+	padding: 8px 12px;
+	/* Prevent page breaks inside details element */
+	page-break-inside: avoid;
+	break-inside: avoid;
+}
+
+summary {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #a6e22e; /* Light green for dropdown titles */
+	cursor: pointer;
+	outline: none;
+}
+
+summary:hover {
+	color: #fd971f;
+}
+
+pre {
+	background-color: #272822;
+	padding: 15px; /* Increased padding for better code readability */
+	border-radius: 6px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+	overflow-x: auto; /* Allow horizontal scrolling for long lines */
+	overflow-wrap: break-word; /* Break long words */
+	word-wrap: break-word; /* Fallback for older browsers */
+	white-space: pre-wrap; /* Preserve whitespace but allow wrapping */
+	margin-top: 8px;
+	margin-bottom: 8px;
+	font-size: 0.9em; /* Slightly larger for better readability */
+	line-height: 1.4; /* Better line spacing */
+	max-width: 100%;
+	min-width: 0; /* Allow shrinking */
+	scrollbar-width: thin; /* Thin scrollbar for better appearance */
+	scrollbar-color: #666 #333; /* Custom scrollbar colors */
+}
+
+/* Webkit scrollbar styling for better appearance */
+pre::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+pre::-webkit-scrollbar-track {
+	background: #333;
+	border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb {
+	background: #666;
+	border-radius: 4px;
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+	background: #888;
+}
+
+/* Override Prism.js font for syntax highlighted code blocks */
+code[class*="language-"] {
+	font-family: "Fira Code", monospace !important;
+	font-size: 0.9em !important; /* Consistent with pre font size */
+	line-height: 1.4 !important; /* Consistent line height */
+}
+
+/* Ensure inline code doesn't overflow */
+code {
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	white-space: pre-wrap;
+}
+
+/* Print-specific styles - Optimized for A4 */
+@media print {
+	@page {
+		size: A4;
+		margin: 15mm;
+		/* Ensure proper page orientation */
+	}
+
+	body {
+		background-color: white !important;
+		color: black !important;
+		margin: 0 auto !important; /* Center content */
+		padding: 0 !important;
+		width: auto !important;
+		max-width: 170mm !important; /* A4 width minus margins for optimal fit */
+		font-size: 10pt !important;
+		line-height: 1.3 !important;
+		font-family: "Times New Roman", serif !important;
+	}
+
+	/* Hide sidebar and navigation elements */
+	.sidebar,
+	.right-sidebar,
+	.navbar,
+	.toggle-container,
+	.sticky-header p {
+		display: none !important;
+	}
+
+	/* Adjust main layout for printing */
+	.main-layout {
+		display: block !important;
+	}
+
+	.main-content {
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+		width: 100% !important;
+		padding: 0 !important;
+		min-width: auto !important;
+	}
+
+	/* Prevent page breaks in important content */
+	details {
+		page-break-inside: avoid !important;
+		break-inside: avoid !important;
+		page-break-before: auto !important;
+		page-break-after: auto !important;
+	}
+
+	pre {
+		page-break-inside: avoid !important;
+		break-inside: avoid !important;
+		page-break-before: auto !important;
+		page-break-after: auto !important;
+		white-space: pre-wrap !important;
+		word-wrap: break-word !important;
+	}
+
+	/* Ensure proper content flow for A4 */
+	.content-wrapper {
+		padding: 0 !important;
+		margin: 0 !important;
+		width: 100% !important;
+	}
+
+	/* Optimize typography for print */
+	h1, h2, h3, h4, h5, h6 {
+		page-break-after: avoid !important;
+		orphans: 3 !important;
+		widows: 3 !important;
+	}
+
+	/* Prevent table splitting */
+	table {
+		page-break-inside: avoid !important;
+		break-inside: avoid !important;
+	}
+
+	.sticky-header {
+		position: static !important;
+		padding: 0 !important;
+		margin: 0 !important;
+		border: none !important;
+		box-shadow: none !important;
+		background: none !important;
+		display: block !important; /* Reset flexbox for print */
+		width: auto !important; /* Reset full width for print */
+		left: auto !important;
+		right: auto !important;
+	}
+
+	.sticky-header::before {
+		display: none !important;
+	}
+
+	.title-section {
+		display: block !important;
+		padding: 0 !important;
+	}
+
+	.content-wrapper {
+		padding: 0 !important;
+	}
+
+	/* Typography optimizations for A4 */
+	h1 {
+		color: black !important;
+		font-size: 16pt !important; /* Slightly smaller for print */
+		font-weight: bold !important;
+		margin: 0 0 12pt 0 !important;
+		page-break-after: avoid !important;
+		text-align: center !important;
+		border-bottom: 1pt solid #000 !important;
+		padding-bottom: 6pt !important;
+		text-shadow: none !important;
+		letter-spacing: normal !important;
+	}
+
+	h1::after {
+		display: none !important;
+	}
+
+	h2,
+	h3,
+	h4 {
+		color: black !important;
+		page-break-after: avoid !important;
+		margin-top: 12pt !important;
+		margin-bottom: 6pt !important;
+	}
+
+	/* Details elements - force open for printing */
+	details {
+		background-color: white !important;
+		border: 1px solid #ccc !important;
+		border-radius: 3px !important;
+		margin-bottom: 8pt !important;
+		padding: 6pt 8pt !important;
+		page-break-inside: avoid !important;
+		break-inside: avoid !important;
+		box-shadow: none !important;
+		display: block !important; /* Force open */
+		page-break-before: auto !important;
+		page-break-after: auto !important;
+	}
+
+	/* Prevent details panels from splitting across pages */
+	details {
+		page-break-inside: avoid !important;
+		break-inside: avoid !important;
+		page-break-before: auto !important;
+		page-break-after: auto !important;
+	}
+
+	/* Ensure JOIN visualizations don't split */
+	.join-visualization,
+	.join-diagram {
+		page-break-inside: avoid !important;
+		break-inside: avoid !important;
+	}
+
+	/* Prevent tables from splitting */
+	table {
+		page-break-inside: avoid !important;
+		break-inside: avoid !important;
+	}
+
+	/* Ensure SQL notes don't split from their code */
+	.sql-note + pre,
+	details > summary + .sql-note,
+	details > summary + pre {
+		page-break-inside: avoid !important;
+		break-inside: avoid !important;
+	}
+
+	/* Prevent SQL notes and code blocks from splitting */
+	.sql-note + pre,
+	details > summary + .sql-note,
+	details > summary + pre {
+		page-break-inside: avoid !important;
+		break-inside: avoid !important;
+	}
+
+	summary {
+		color: #006400 !important;
+		font-size: 11pt !important;
+		font-weight: bold !important;
+		margin-bottom: 4pt !important;
+		page-break-after: avoid !important;
+		display: list-item !important;
+		list-style-type: none !important;
+	}
+
+	/* Remove summary markers for cleaner print */
+	details > summary::marker {
+		display: none !important;
+	}
+
+	/* SQL notes styling */
+	.sql-note {
+		background-color: #f8f8f8 !important;
+		border-left: 3px solid #4caf50 !important;
+		padding: 4pt 6pt !important;
+		margin: 4pt 0 !important;
+		font-size: 9pt !important;
+		line-height: 1.2 !important;
+		page-break-inside: avoid !important;
+		color: black !important;
+	}
+
+	.sql-note.warning {
+		border-left-color: #ff9800 !important;
+		background-color: #fff8e1 !important;
+	}
+
+	.sql-note.important {
+		border-left-color: #f44336 !important;
+		background-color: #ffebee !important;
+	}
+
+	.sql-note strong {
+		color: #2e7d32 !important;
+	}
+
+	.sql-note.warning strong {
+		color: #e65100 !important;
+	}
+
+	.sql-note.important strong {
+		color: #c62828 !important;
+	}
+
+	/* Code blocks optimization */
+	pre {
+		background-color: #f5f5f5 !important;
+		border: 1px solid #ddd !important;
+		border-radius: 3px !important;
+		padding: 6pt !important;
+		margin: 4pt 0 !important;
+		font-size: 8pt !important;
+		line-height: 1.2 !important;
+		page-break-inside: avoid !important;
+		white-space: pre-wrap !important;
+		word-wrap: break-word !important;
+		overflow-wrap: break-word !important;
+		font-family: "Courier New", monospace !important;
+		max-width: 100% !important;
+		box-sizing: border-box !important;
+	}
+
+	code {
+		color: #333 !important;
+		font-family: "Courier New", monospace !important;
+	}
+
+	/* Override Prism.js font for syntax highlighted code blocks */
+	code[class*="language-"] {
+		font-family: "Courier New", monospace !important;
+	}
+
+	/* Links styling for print */
+	a {
+		color: #0066cc !important;
+		text-decoration: underline !important;
+	}
+
+	a[href^="http"]:after {
+		content: " (" attr(href) ")" !important;
+		font-size: 8pt !important;
+		color: #666 !important;
+	}
+
+	/* Page break optimizations */
+	h1 {
+		page-break-before: always !important;
+	}
+
+	h1:first-of-type {
+		page-break-before: avoid !important;
+	}
+
+	/* Prevent awkward breaks */
+	.sql-note + pre,
+	details > summary + .sql-note,
+	details > summary + pre {
+		page-break-inside: avoid !important;
+	}
+
+	/* Reduce widows and orphans */
+	p,
+	.sql-note,
+	pre,
+	ul,
+	ol {
+		orphans: 2 !important;
+		widows: 2 !important;
+	}
+
+	/* List styling */
+	ul,
+	ol {
+		margin: 4pt 0 !important;
+		padding-left: 15pt !important;
+	}
+
+	li {
+		margin-bottom: 2pt !important;
+		line-height: 1.2 !important;
+	}
+
+	/* Table styling for better print */
+	table {
+		border-collapse: collapse !important;
+		width: 100% !important;
+		margin: 4pt 0 !important;
+		font-size: 8pt !important;
+	}
+
+	th,
+	td {
+		border: 1px solid #999 !important;
+		padding: 4pt !important;
+		text-align: left !important;
+	}
+
+	th {
+		background-color: #f0f0f0 !important;
+		font-weight: bold !important;
+	}
+}
+
+/* Toggle buttons styles - Compact design */
+.toggle-container {
+	display: flex;
+	justify-content: flex-end; /* Align to right */
+	gap: 10px; /* Reduced gap */
+	margin: 0; /* Remove margins */
+	flex-wrap: wrap;
+	flex-shrink: 0; /* Don't shrink buttons */
+}
+
+.toggle-btn {
+	background: linear-gradient(135deg, #4b4b4b 0%, #5a5a5a 100%);
+	color: #e6db74;
+	border: 1px solid #666; /* Thinner border */
+	padding: 6px 12px; /* Smaller padding */
+	border-radius: 6px; /* Smaller border radius */
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 0.75em; /* Smaller font */
+	transition: all 0.3s ease;
+	text-transform: uppercase;
+	letter-spacing: 0.3px; /* Less letter spacing */
+	position: relative;
+	overflow: hidden;
+	min-width: 100px; /* Smaller minimum width */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px; /* Smaller gap for icons */
+}
+
+.toggle-btn::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		rgba(166, 226, 46, 0.2),
+		transparent
+	);
+	transition: left 0.5s;
+}
+
+/* Add icons using CSS content */
+#expandAllBtn::after {
+	content: "📂";
+	font-size: 1.1em;
+}
+
+#collapseAllBtn::after {
+	content: "📁";
+	font-size: 1.1em;
+}
+
+.toggle-btn:hover {
+	background: linear-gradient(135deg, #5a5a5a 0%, #6a6a6a 100%);
+	color: #a6e22e;
+	border-color: #a6e22e;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 15px rgba(166, 226, 46, 0.3);
+}
+
+.toggle-btn:hover::before {
+	left: 100%;
+}
+
+.toggle-btn:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 8px rgba(166, 226, 46, 0.2);
+}
+
+/* Main content wrapper with padding for sticky header */
+.content-wrapper {
+	padding: 15px;
+	padding-top: 20px;
+}
+
+/* Note styling */
+.sql-note {
+	background-color: #2d3748;
+	border-left: 4px solid #a6e22e;
+	padding: 10px 12px;
+	margin: 8px 0;
+	border-radius: 4px;
+	font-size: 0.85em;
+	line-height: 1.4;
+}
+
+.sql-note strong {
+	color: #a6e22e;
+	font-weight: bold;
+}
+
+.sql-note ul {
+	margin: 6px 0;
+	padding-left: 18px;
+}
+
+.sql-note li {
+	margin: 3px 0;
+}
+
+.sql-note.warning {
+	border-left-color: #fd971f;
+	background-color: #3d2d1a;
+}
+
+.sql-note.warning strong {
+	color: #fd971f;
+}
+
+.sql-note.important {
+	border-left-color: #f92672;
+	background-color: #3d1a2d;
+}
+
+.sql-note.important strong {
+	color: #f92672;
+}
+
+/* JOIN Visualization Styles */
+.join-visualization {
+	margin: 20px 0;
+	padding: 15px;
+	background-color: #1a1a1a;
+	border-radius: 8px;
+	border: 1px solid #333;
+}
+
+.join-diagram {
+	margin-bottom: 30px;
+	padding: 15px;
+	background-color: #232323;
+	border-radius: 6px;
+	border: 1px solid #444;
+}
+
+.join-diagram h5 {
+	margin: 0 0 15px 0;
+	font-size: 1.1em;
+	text-align: center;
+}
+
+.table-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 10px;
+}
+
+.table-wrapper {
+	flex: 1;
+	min-width: 80px;
+	max-width: 140px;
+}
+
+.table-title {
+	text-align: center;
+	font-weight: bold;
+	color: #a6e22e;
+	margin-bottom: 5px;
+	font-size: 0.7em;
+}
+
+.visual-table {
+	width: 100%;
+	border-collapse: collapse;
+	background-color: #2c2c2c;
+	border: 1px solid #555;
+	border-radius: 4px;
+	overflow: hidden;
+	font-size: 0.7em; /* Slightly larger for better readability */
+	max-width: 100%;
+	overflow-x: auto; /* Allow horizontal scrolling for wide tables */
+}
+
+.visual-table th {
+	background-color: #404040;
+	color: #e6db74;
+	padding: 6px 8px; /* More padding for better readability */
+	text-align: center;
+	font-weight: bold;
+	border: 1px solid #555;
+	white-space: nowrap; /* Prevent header text wrapping */
+}
+
+.visual-table td {
+	padding: 6px 8px; /* More padding for better readability */
+	text-align: center;
+	border: 1px solid #555;
+	color: #f8f8f2;
+	word-wrap: break-word; /* Allow content to wrap if needed */
+}
+
+.highlight-row {
+	background-color: #2d5016 !important;
+	border: 2px solid #a6e22e !important;
+}
+
+.no-match-row {
+	background-color: #501616 !important;
+	border: 2px solid #f92672 !important;
+	opacity: 0.8;
+}
+
+.null-row {
+	background-color: #3d2d1a !important;
+	color: #fd971f !important;
+}
+
+.null-row td {
+	color: #fd971f !important;
+}
+
+.join-operator {
+	font-weight: bold;
+	color: #66d9ef;
+	font-size: 0.7em;
+	text-align: center;
+	padding: 8px;
+	background-color: #1e1e1e;
+	border-radius: 4px;
+	border: 1px solid #444;
+	min-width: 80px;
+}
+
+.equals {
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #a6e22e;
+	padding: 0 10px;
+}
+
+.result-table {
+	background-color: #1a2e1a !important;
+	border: 2px solid #a6e22e !important;
+}
+
+.result-table th {
+	background-color: #2d5016 !important;
+}
+
+/* Responsive header design */
+@media (max-width: 768px) {
+	.sticky-header {
+		padding: 10px 15px;
+		flex-direction: column; /* Stack on tablet */
+		align-items: stretch;
+		gap: 8px;
+		position: relative; /* Change to relative for mobile */
+		width: auto; /* Reset full width on mobile */
+		left: auto;
+		right: auto;
+	}
+
+	.main-content {
+		padding-top: 55px; /* Adjusted for mobile header height */
+		margin-left: 0; /* Remove sidebar margin on mobile */
+		margin-right: 0; /* Remove right sidebar margin on mobile */
+		padding-left: 35px; /* Enhanced padding for mobile experience */
+		padding-right: 35px; /* Enhanced padding for mobile experience */
+		min-width: auto; /* Allow full width on mobile */
+	}
+
+	.sidebar {
+		display: none; /* Hide left sidebar on mobile */
+	}
+
+	.right-sidebar {
+		display: none; /* Hide right sidebar on mobile */
+	}
+
+	.title-section {
+		text-align: center;
+		padding-right: 0;
+	}
+
+	h1 {
+		font-size: 1.3em;
+		text-align: center;
+		margin-bottom: 4px;
+	}
+
+	.toggle-container {
+		justify-content: center;
+		margin: 0;
+	}
+
+	.toggle-btn {
+		padding: 6px 10px;
+		font-size: 0.7em;
+		min-width: 90px;
+	}
+}
+
+@media (max-width: 480px) {
+	.sticky-header {
+		padding: 8px 12px;
+	}
+
+	.main-content {
+		padding-top: 45px; /* Adjusted for smaller mobile header */
+	}
+
+	h1 {
+		font-size: 1.1em;
+		margin-bottom: 2px;
+	}
+
+	.title-section p {
+		font-size: 0.7em !important;
+		margin: 1px 0 0 0 !important;
+	}
+
+	.toggle-container {
+		gap: 6px;
+	}
+
+	.toggle-btn {
+		padding: 5px 8px;
+		font-size: 0.65em;
+		min-width: 80px;
+	}
+}
+
+/* Extra wide screens - maximize content space */
+@media (min-width: 1400px) {
+	.sidebar {
+		width: 320px; /* Balanced width on ultra-wide screens */
+		padding: 20px 15px; /* Compact padding for consistency */
+	}
+
+	.right-sidebar {
+		width: 220px; /* Balanced width on ultra-wide screens */
+		padding: 20px 15px; /* Compact padding for consistency */
+	}
+
+	.main-content {
+		margin-left: 320px;
+		margin-right: 220px;
+		padding: 0 60px; /* Extra padding for ultra-wide screens */
+		min-width: 500px;
+		padding-top: 65px; /* Maintain header clearance */
+	}
+
+	/* Larger code blocks on ultra-wide screens */
+	pre {
+		font-size: 0.95em;
+		padding: 18px;
+	}
+}
+
+/* Medium screens - balanced layout */
+@media (max-width: 1200px) {
+	.sidebar {
+		width: 280px; /* Balanced for medium screens */
+		padding: 20px 15px; /* Compact padding for consistency */
+	}
+
+	.right-sidebar {
+		width: 180px; /* Balanced for medium screens */
+		padding: 20px 15px; /* Compact padding for consistency */
+	}
+
+	.main-content {
+		margin-left: 280px;
+		margin-right: 180px;
+		padding: 0 40px;
+		min-width: 300px;
+		padding-top: 65px; /* Maintain header clearance */
+	}
+}
+
+/* Compact screens - reduce sidebar widths */
+@media (max-width: 1000px) {
+	.sidebar {
+		width: 250px; /* Compact but readable */
+		padding: 20px 15px; /* Compact padding for consistency */
+	}
+
+	.right-sidebar {
+		width: 160px; /* Compact but readable */
+		padding: 20px 15px; /* Compact padding for consistency */
+	}
+
+	.main-content {
+		margin-left: 250px;
+		margin-right: 160px;
+		padding: 0 30px;
+		min-width: 250px;
+		padding-top: 65px; /* Maintain header clearance */
+	}
+}
+
+/* General content overflow handling for expanded layout */
+.content-wrapper {
+	max-width: 100%;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	position: relative; /* Ensure proper positioning */
+	z-index: 1; /* Ensure content appears above background elements */
+}
+
+/* Ensure all content containers handle overflow properly */
+details {
+	max-width: 100%;
+	overflow-x: auto;
+	position: relative; /* Ensure proper positioning */
+}
+
+/* Handle long URLs and text */
+a {
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+
+/* Ensure proper text wrapping for all content */
+p, li, dd, dt {
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	line-height: 1.6;
+}
+
+/* Handle images and media */
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+/* Ensure form elements don't overflow */
+input, textarea, select {
+	max-width: 100%;
+	box-sizing: border-box;
+}

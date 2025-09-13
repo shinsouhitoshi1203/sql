@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>SQL Server SELECT Syntax Cheat Sheet</title>
+
+		<!-- Prism.js Monokai Theme -->
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+			rel="stylesheet"
+		/>
+
+		<!-- External Stylesheet -->
+		<link rel="stylesheet" href="styles.css" />
+
+		<!-- External JavaScript -->
+		<script src="scripts.js" defer></script>
+	</head>
+	<body>
+		<div class="main-layout">
+			<!-- Left Sidebar Navigation -->
+			<aside class="sidebar">
+				<h3>📚 Sections</h3>
+				<ul class="sidebar-nav">
+					<li><a href="#basic-select">🔍 Basic SELECT</a></li>
+					<li>
+						<a href="#filtering-where">📌 Filtering with WHERE</a>
+					</li>
+					<li>
+						<a href="#sorting-order-by">📊 Sorting with ORDER BY</a>
+					</li>
+					<li>
+						<a href="#limiting-top">🔢 Limiting with TOP</a>
+					</li>
+					<li>
+						<a href="#aggregate-functions"
+							>Σ Aggregate Functions: Uses & Pitfalls</a
+						>
+					</li>
+					<li>
+						<a href="#grouping-group-by"
+							>📁 Grouping with GROUP BY</a
+						>
+					</li>
+					<li><a href="#joining-tables">🔗 Joining Tables</a></li>
+					<li><a href="#subqueries">🧠 Subqueries</a></li>
+					<li>
+						<a href="#common-use-cases">🚀 Common Use Cases</a>
+					</li>
+					<li>
+						<a href="#transaction-management"
+							>🔄 Transaction Management</a
+						>
+					</li>
+					<li>
+						<a href="#performance-tips"
+							>💡 Performance Optimization Tips</a
+						>
+					</li>
+					<li>
+						<a href="#common-pitfalls">⚠️ Common Pitfalls</a
+						>
+					</li>
+				</ul>
+			</aside>
+
+			<!-- Right Sidebar for Pages -->
+			<aside class="right-sidebar">
+				<h4>📄 Pages</h4>
+				<a href="SQL-1.html" class="pagination-btn"
+					>📋 Page 1: Structure</a
+				>
+				<a href="SQL-2.html" class="pagination-btn" disabled
+					>🔍 Page 2: Queries</a
+				>
+			</aside>
+
+			<!-- Main Content -->
+			<main class="main-content">
+				<div class="sticky-header">
+					<div class="title-section">
+						<h1>SQL Server SELECT Syntax Cheat Sheet</h1>
+						<p>Query Syntax & Operations</p>
+					</div>
+
+					<div class="toggle-container">
+						<button id="expandAllBtn" class="toggle-btn">
+							Expand All
+						</button>
+						<button id="collapseAllBtn" class="toggle-btn">
+							Collapse All
+						</button>
+					</div>
+				</div>
+
+				<div class="content-wrapper">
+					<details id="basic-select" open>
+						<summary>🔍 Basic SELECT</summary>
+						<div class="sql-note">
+							<strong>When to use:</strong>
+							<ul>
+								<li>
+									<strong>SELECT *</strong> - For initial data
+									exploration or when you need all fields
+								</li>
+								<li>
+									<strong>Specific columns</strong> - Best
+									practice for production code (better
+									performance)
+								</li>
+							</ul>
+							<strong>Important:</strong> Avoid SELECT * in
+							production as it's less efficient and can break when
+							schema changes.
+						</div>
+
+						<pre><code class="language-sql">
+-- Select all columns
+SELECT * FROM Employees;
+
+-- Select specific columns
+SELECT Name, HireDate FROM Employees;
+    </code></pre>
+					</details>
+
+					<details id="filtering-where">
+						<summary>📌 Filtering with WHERE</summary>
+						<div class="sql-note">
+							<strong>When to use:</strong>
+							<ul>
+								<li>
+									Restrict result sets based on specific
+									conditions
+								</li>
+								<li>
+									Always include WHERE clause to limit data
+									when possible, especially with large tables
+								</li>
+								<li>
+									Use parentheses for complex conditions to
+									ensure correct operator precedence
+								</li>
+							</ul>
+							<strong>Important:</strong> Remember to handle NULL
+							values properly.
+						</div>
+
+						<pre><code class="language-sql">
+-- Filter rows
+SELECT * FROM Employees 
+WHERE HireDate >= '2020-01-01';
+
+-- Multiple conditions
+SELECT * FROM Employees 
+WHERE Salary > 50000 AND Department = 'IT';
+    </code></pre>
+
+						<div class="sql-note warning">
+							<strong>NULL Handling Warning:</strong>
+							<ul>
+								<li>
+									This will NOT return rows where Department
+									is NULL:
+								</li>
+							</ul>
+						</div>
+
+						<pre><code class="language-sql">
+SELECT * FROM Employees WHERE Department = 'IT';
+    </code></pre>
+
+						<div class="sql-note">
+							<strong>Correct approach:</strong> Use this to
+							include NULL values in your results:
+						</div>
+
+						<pre><code class="language-sql">
+SELECT * FROM Employees WHERE Department = 'IT' OR Department IS NULL;
+    </code></pre>
+					</details>
+
+					<details id="sorting-order-by">
+						<summary>📊 Sorting with ORDER BY</summary>
+						<div class="sql-note">
+							<strong>When to use:</strong>
+							<ul>
+								<li>
+									<strong>ASC</strong> - For increasing order
+									(A to Z, oldest to newest, etc.)
+								</li>
+								<li>
+									<strong>DESC</strong> - For decreasing order
+									(Z to A, newest to oldest, highest to
+									lowest)
+								</li>
+								<li>
+									<strong>Multiple fields</strong> - When
+									primary sort isn't sufficient (e.g.,
+									multiple employees hired on same date)
+								</li>
+							</ul>
+							<strong>Note:</strong> ASC is the default and can be
+							omitted. Order matters - sorts by first column, then
+							second column for ties.
+						</div>
+
+						<pre><code class="language-sql">
+-- Sort ascending
+SELECT * FROM Employees 
+ORDER BY Name ASC;
+
+-- Sort descending
+SELECT * FROM Employees 
+ORDER BY HireDate DESC;
+
+-- Multiple sort fields
+SELECT * FROM Employees
+ORDER BY Department ASC, Salary DESC;
+    </code></pre>
+					</details>
+
+					<details id="limiting-top">
+						<summary>🔢 Limiting with TOP</summary>
+						<div class="sql-note important">
+							<strong>Important:</strong> Always use with ORDER
+							BY, otherwise results are arbitrary.
+						</div>
+
+						<div class="sql-note">
+							<strong>When to use:</strong>
+							<ul>
+								<li>
+									<strong>TOP n</strong> - When you need only
+									a limited number of records (e.g., highest
+									paid employees)
+								</li>
+								<li>
+									<strong>TOP n PERCENT</strong> - When you
+									want a percentage of rows rather than a
+									fixed number
+								</li>
+								<li>
+									<strong>TOP n WITH TIES</strong> - When you
+									want to include tied values (e.g., multiple
+									employees with same salary)
+								</li>
+							</ul>
+						</div>
+
+						<pre><code class="language-sql">
+-- Get top 5 rows
+SELECT TOP 5 * FROM Employees 
+ORDER BY Salary DESC;
+
+-- Get top percentage
+SELECT TOP 10 PERCENT * FROM Employees
+ORDER BY HireDate DESC;
+
+-- WITH TIES option
+SELECT TOP 5 WITH TIES * FROM Employees
+ORDER BY Salary DESC;
+    </code></pre>
+					</details>
+
+					<details id="aggregate-functions">
+						<summary>
+							Σ Aggregate Functions: Uses & Pitfalls
+						</summary>
+						<div class="sql-note important">
+							<strong>Aggregate functions</strong> summarize data
+							across multiple rows. Common functions:
+							<strong>COUNT, SUM, AVG, MIN, MAX</strong>.
+						</div>
+						<div class="sql-note">
+							<strong>Use Cases:</strong>
+							<ul>
+								<li>
+									<strong>COUNT</strong>: Number of rows or
+									non-NULL values
+								</li>
+								<li>
+									<strong>SUM</strong>: Total of numeric
+									column
+								</li>
+								<li><strong>AVG</strong>: Average value</li>
+								<li>
+									<strong>MIN/MAX</strong>: Smallest/largest
+									value
+								</li>
+							</ul>
+						</div>
+
+						<div class="sql-note">
+							<strong
+								>Valid Syntax Positions for Aggregate
+								Functions:</strong
+							>
+							<ul>
+								<li>
+									<strong>SELECT clause</strong>: With or
+									without GROUP BY
+								</li>
+								<li>
+									<strong>HAVING clause</strong>: Filter
+									grouped results
+								</li>
+								<li>
+									<strong>ORDER BY clause</strong>: Sort by
+									aggregated values
+								</li>
+								<li>
+									<strong>Subqueries</strong>: Compare against
+									aggregated values
+								</li>
+							</ul>
+						</div>
+
+						<div class="sql-note important">
+							<strong>Syntax Rules:</strong>
+							<ul>
+								<li>
+									✅ <strong>SELECT COUNT(*)</strong> - Valid
+									(no GROUP BY needed)
+								</li>
+								<li>
+									✅ <strong>SELECT Name, COUNT(*)</strong> -
+									Error (Name not in GROUP BY)
+								</li>
+								<li>
+									✅ <strong>GROUP BY Name</strong> - Required
+									for non-aggregated columns
+								</li>
+								<li>
+									✅ <strong>HAVING COUNT(*) > 5</strong> -
+									Valid in HAVING clause
+								</li>
+								<li>
+									❌ <strong>WHERE COUNT(*) > 5</strong> -
+									Invalid (aggregates not allowed in WHERE)
+								</li>
+							</ul>
+						</div>
+
+						<pre><code class="language-sql">-- ✅ VALID: Aggregate in SELECT (no GROUP BY)
+SELECT COUNT(*) AS TotalEmployees,
+       AVG(Salary) AS AvgSalary,
+       MAX(HireDate) AS LatestHire
+FROM Employees;
+
+-- ✅ VALID: Aggregate in SELECT (with GROUP BY)
+SELECT Department,
+       COUNT(*) AS EmployeeCount,
+       AVG(Salary) AS AvgDeptSalary
+FROM Employees
+GROUP BY Department;
+
+-- ✅ VALID: Aggregate in HAVING
+SELECT Department, AVG(Salary) AS AvgSalary
+FROM Employees
+GROUP BY Department
+HAVING AVG(Salary) > 50000;
+
+-- ✅ VALID: Aggregate in ORDER BY
+SELECT Department, COUNT(*) AS EmployeeCount
+FROM Employees
+GROUP BY Department
+ORDER BY COUNT(*) DESC;
+
+-- ✅ VALID: Aggregate in subquery
+SELECT Name, Salary
+FROM Employees
+WHERE Salary > (SELECT AVG(Salary) FROM Employees);
+
+-- ❌ INVALID: Non-aggregated column without GROUP BY
+SELECT Name, AVG(Salary) FROM Employees;
+    </code></pre>
+						<div class="sql-note warning">
+							<strong>Pitfall 1:</strong> <u>COUNT(*)</u> counts
+							all rows, <u>COUNT(column)</u> counts only non-NULL
+							values.
+						</div>
+						<pre><code class="language-sql">-- Counts all employees
+SELECT COUNT(*) FROM Employees;
+-- Counts only employees with a salary
+SELECT COUNT(Salary) FROM Employees;
+    </code></pre>
+						<div class="sql-note warning">
+							<strong>Pitfall 2:</strong>
+							<u>AVG, SUM, MIN, MAX</u> ignore NULLs. If all
+							values are NULL, result is NULL.
+						</div>
+						<pre><code class="language-sql">-- If Salary is NULL for all, AVG(Salary) returns NULL
+SELECT AVG(Salary) FROM Employees;
+    </code></pre>
+						<div class="sql-note warning">
+							<strong>Pitfall 3:</strong>
+							<u>Mixing aggregates and non-aggregates</u> in
+							SELECT without GROUP BY causes errors.
+						</div>
+						<pre><code class="language-sql">-- Error: Name is not in GROUP BY or aggregate
+SELECT Name, AVG(Salary) FROM Employees;
+    </code></pre>
+						<div class="sql-note">
+							<strong>Best Practice:</strong> Always use GROUP BY
+							for non-aggregated columns, and check for NULLs in
+							your data.
+						</div>
+					</details>
+
+					<details id="grouping-group-by">
+						<summary>📁 Grouping with GROUP BY</summary>
+						<div class="sql-note important">
+							<strong>Critical Rule:</strong> MUST USE with
+							aggregate functions (COUNT, SUM, AVG, MIN, MAX).
+							Each column in SELECT must either be in GROUP BY or
+							be an aggregate.
+						</div>
+
+						<div class="sql-note">
+							<strong>Basic grouping:</strong>
+						</div>
+
+						<pre><code class="language-sql">
+-- Group and count
+SELECT Department, COUNT(*) AS Total 
+FROM Employees 
+GROUP BY Department;
+    </code></pre>
+
+						<div class="sql-note">
+							<strong>HAVING vs WHERE:</strong>
+							<ul>
+								<li>
+									<strong>WHERE</strong> filters rows before
+									grouping
+								</li>
+								<li>
+									<strong>HAVING</strong> filters after
+									grouping (use for aggregated values)
+								</li>
+							</ul>
+							<p>
+								Order: <strong>WHERE</strong>
+								<u><strong>GROUP BY</strong> </u
+								><strong>HAVING <i>aggreations</i></strong>
+							</p>
+						</div>
+
+						<pre><code class="language-sql">
+-- Group with condition (HAVING)
+SELECT Department, AVG(Salary) AS AvgSalary 
+FROM Employees 
+GROUP BY Department 
+HAVING AVG(Salary) > 60000;
+    </code></pre>
+
+						<div class="sql-note">
+							<strong>Multiple aggregations:</strong> Use when you
+							need different aggregations on the same grouped
+							data.
+						</div>
+
+						<pre><code class="language-sql">
+SELECT Department, 
+       COUNT(*) AS EmployeeCount,
+       AVG(Salary) AS AvgSalary,
+       MAX(Salary) AS HighestSalary,
+       MIN(HireDate) AS EarliestHire
+FROM Employees
+GROUP BY Department;
+    </code></pre>
+
+						<div class="sql-note">
+							<strong>String aggregation:</strong> Use to combine
+							string values from grouped rows (SQL Server 2017+).
+						</div>
+
+						<pre><code class="language-sql">
+SELECT Department,
+       STRING_AGG(Name, ', ') AS EmployeeList
+FROM Employees
+GROUP BY Department;
+    </code></pre>
+					</details>
+
+					<details id="joining-tables">
+						<summary>🔗 Joining Tables</summary>
+						<div class="sql-note">
+							<strong>Join Types:</strong>
+							<ul>
+								<li>
+									<strong>INNER JOIN</strong> - Only matching
+									rows from both tables
+								</li>
+								<li>
+									<strong>LEFT JOIN</strong> - All rows from
+									left table, matching rows from right table
+								</li>
+								<li>
+									<strong>RIGHT JOIN</strong> - All rows from
+									right table, matching rows from left table
+								</li>
+								<li>
+									<strong>FULL OUTER JOIN</strong> - All rows
+									from both tables regardless of matches
+								</li>
+							</ul>
+						</div>
+
+						<!-- Visual JOIN Diagrams -->
+						<div class="join-visualization">
+							<h4
+								style="
+									text-align: center;
+									color: #a6e22e;
+									margin: 20px 0 10px;
+								"
+							>
+								Visual JOIN Representations
+							</h4>
+
+							<!-- INNER JOIN Visual -->
+							<div class="join-diagram">
+								<h5 style="color: #a6e22e; margin-bottom: 10px">
+									INNER JOIN
+								</h5>
+								<div class="table-container">
+									<div class="table-wrapper">
+										<div class="table-title">
+											Employees Table
+										</div>
+										<table class="visual-table">
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>Name</th>
+													<th>DeptID</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="highlight-row">
+													<td>1</td>
+													<td>John</td>
+													<td>10</td>
+												</tr>
+												<tr class="highlight-row">
+													<td>2</td>
+													<td>Jane</td>
+													<td>20</td>
+												</tr>
+												<tr>
+													<td>3</td>
+													<td>Bob</td>
+													<td>30</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<div class="join-operator">INNER JOIN</div>
+
+									<div class="table-wrapper">
+										<div class="table-title">
+											Departments Table
+										</div>
+										<table class="visual-table">
+											<thead>
+												<tr>
+													<th>DeptID</th>
+													<th>DeptName</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="highlight-row">
+													<td>10</td>
+													<td>HR</td>
+												</tr>
+												<tr class="highlight-row">
+													<td>20</td>
+													<td>IT</td>
+												</tr>
+												<tr>
+													<td>40</td>
+													<td>Sales</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<div class="equals">=</div>
+
+									<div class="table-wrapper">
+										<div class="table-title">Result</div>
+										<table
+											class="visual-table result-table"
+										>
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>Name</th>
+													<th>DeptID</th>
+													<th>DeptName</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td>John</td>
+													<td>10</td>
+													<td>HR</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>Jane</td>
+													<td>20</td>
+													<td>IT</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+
+							<!-- LEFT JOIN Visual -->
+							<div class="join-diagram">
+								<h5 style="color: #a6e22e; margin: 20px 0 10px">
+									LEFT JOIN
+								</h5>
+								<div class="table-container">
+									<div class="table-wrapper">
+										<div class="table-title">
+											Employees Table
+										</div>
+										<table class="visual-table">
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>Name</th>
+													<th>DeptID</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="highlight-row">
+													<td>1</td>
+													<td>John</td>
+													<td>10</td>
+												</tr>
+												<tr class="highlight-row">
+													<td>2</td>
+													<td>Jane</td>
+													<td>20</td>
+												</tr>
+												<tr class="no-match-row">
+													<td>3</td>
+													<td>Bob</td>
+													<td>30</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<div class="join-operator">LEFT JOIN</div>
+
+									<div class="table-wrapper">
+										<div class="table-title">
+											Departments Table
+										</div>
+										<table class="visual-table">
+											<thead>
+												<tr>
+													<th>DeptID</th>
+													<th>DeptName</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="highlight-row">
+													<td>10</td>
+													<td>HR</td>
+												</tr>
+												<tr class="highlight-row">
+													<td>20</td>
+													<td>IT</td>
+												</tr>
+												<tr>
+													<td>40</td>
+													<td>Sales</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<div class="equals">=</div>
+
+									<div class="table-wrapper">
+										<div class="table-title">Result</div>
+										<table
+											class="visual-table result-table"
+										>
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>Name</th>
+													<th>DeptID</th>
+													<th>DeptName</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td>John</td>
+													<td>10</td>
+													<td>HR</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>Jane</td>
+													<td>20</td>
+													<td>IT</td>
+												</tr>
+												<tr class="null-row">
+													<td>3</td>
+													<td>Bob</td>
+													<td>30</td>
+													<td>NULL</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+
+							<!-- RIGHT JOIN Visual -->
+							<div class="join-diagram">
+								<h5 style="color: #a6e22e; margin: 20px 0 10px">
+									RIGHT JOIN
+								</h5>
+								<div class="table-container">
+									<div class="table-wrapper">
+										<div class="table-title">
+											Employees Table
+										</div>
+										<table class="visual-table">
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>Name</th>
+													<th>DeptID</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="highlight-row">
+													<td>1</td>
+													<td>John</td>
+													<td>10</td>
+												</tr>
+												<tr class="highlight-row">
+													<td>2</td>
+													<td>Jane</td>
+													<td>20</td>
+												</tr>
+												<tr>
+													<td>3</td>
+													<td>Bob</td>
+													<td>30</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<div class="join-operator">RIGHT JOIN</div>
+
+									<div class="table-wrapper">
+										<div class="table-title">
+											Departments Table
+										</div>
+										<table class="visual-table">
+											<thead>
+												<tr>
+													<th>DeptID</th>
+													<th>DeptName</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="highlight-row">
+													<td>10</td>
+													<td>HR</td>
+												</tr>
+												<tr class="highlight-row">
+													<td>20</td>
+													<td>IT</td>
+												</tr>
+												<tr class="no-match-row">
+													<td>40</td>
+													<td>Sales</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<div class="equals">=</div>
+
+									<div class="table-wrapper">
+										<div class="table-title">Result</div>
+										<table
+											class="visual-table result-table"
+										>
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>Name</th>
+													<th>DeptID</th>
+													<th>DeptName</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td>John</td>
+													<td>10</td>
+													<td>HR</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>Jane</td>
+													<td>20</td>
+													<td>IT</td>
+												</tr>
+												<tr class="null-row">
+													<td>NULL</td>
+													<td>NULL</td>
+													<td>40</td>
+													<td>Sales</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+
+							<!-- FULL OUTER JOIN Visual -->
+							<div class="join-diagram">
+								<h5 style="color: #a6e22e; margin: 20px 0 10px">
+									FULL OUTER JOIN
+								</h5>
+								<div class="table-container">
+									<div class="table-wrapper">
+										<div class="table-title">
+											Employees Table
+										</div>
+										<table class="visual-table">
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>Name</th>
+													<th>DeptID</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="highlight-row">
+													<td>1</td>
+													<td>John</td>
+													<td>10</td>
+												</tr>
+												<tr class="highlight-row">
+													<td>2</td>
+													<td>Jane</td>
+													<td>20</td>
+												</tr>
+												<tr class="no-match-row">
+													<td>3</td>
+													<td>Bob</td>
+													<td>30</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<div class="join-operator">
+										FULL OUTER JOIN
+									</div>
+
+									<div class="table-wrapper">
+										<div class="table-title">
+											Departments Table
+										</div>
+										<table class="visual-table">
+											<thead>
+												<tr>
+													<th>DeptID</th>
+													<th>DeptName</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="highlight-row">
+													<td>10</td>
+													<td>HR</td>
+												</tr>
+												<tr class="highlight-row">
+													<td>20</td>
+													<td>IT</td>
+												</tr>
+												<tr class="no-match-row">
+													<td>40</td>
+													<td>Sales</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<div class="equals">=</div>
+
+									<div class="table-wrapper">
+										<div class="table-title">Result</div>
+										<table
+											class="visual-table result-table"
+										>
+											<thead>
+												<tr>
+													<th>ID</th>
+													<th>Name</th>
+													<th>DeptID</th>
+													<th>DeptName</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td>John</td>
+													<td>10</td>
+													<td>HR</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>Jane</td>
+													<td>20</td>
+													<td>IT</td>
+												</tr>
+												<tr class="null-row">
+													<td>3</td>
+													<td>Bob</td>
+													<td>30</td>
+													<td>NULL</td>
+												</tr>
+												<tr class="null-row">
+													<td>NULL</td>
+													<td>NULL</td>
+													<td>40</td>
+													<td>Sales</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="sql-note">
+							<strong>Inner Join:</strong> Use when you only want
+							matching rows from both tables. Will exclude
+							employees without departments or departments without
+							employees.
+						</div>
+
+						<pre><code class="language-sql">
+SELECT e.Name, d.DepartmentName 
+FROM Employees e
+INNER JOIN Departments d 
+    ON e.DepartmentID = d.DepartmentID;
+    </code></pre>
+
+						<div class="sql-note">
+							<strong>Left Join:</strong> Use when you want all
+							rows from left table even if no matches in right
+							table. Will include employees without departments
+							(department fields will be NULL).
+						</div>
+
+						<pre><code class="language-sql">
+SELECT e.Name, d.DepartmentName 
+FROM Employees e
+LEFT JOIN Departments d 
+    ON e.DepartmentID = d.DepartmentID;
+    </code></pre>
+
+						<div class="sql-note">
+							<strong>Right Join:</strong> Use when you want all
+							rows from right table even if no matches in left
+							table. Will include departments without employees
+							(employee fields will be NULL).
+						</div>
+
+						<pre><code class="language-sql">
+SELECT e.Name, d.DepartmentName 
+FROM Employees e
+RIGHT JOIN Departments d 
+    ON e.DepartmentID = d.DepartmentID;
+    </code></pre>
+
+						<div class="sql-note">
+							<strong>Full Outer Join:</strong> Use when you want
+							all rows from both tables regardless of matches.
+							Includes all rows from both tables, with NULL values
+							where no match exists.
+						</div>
+
+						<pre><code class="language-sql">
+SELECT e.Name, d.DepartmentName 
+FROM Employees e
+FULL OUTER JOIN Departments d 
+    ON e.DepartmentID = d.DepartmentID;
+    </code></pre>
+					</details>
+
+					<details id="subqueries">
+						<summary>🧠 Subqueries</summary>
+						<div class="sql-note">
+							<strong>Subquery Types:</strong>
+							<ul>
+								<li>
+									<strong>WHERE subquery</strong> - Filter
+									based on results from another query
+								</li>
+								<li>
+									<strong>FROM subquery</strong> - Query from
+									a derived table
+								</li>
+								<li>
+									<strong>IN subquery</strong> - Filter
+									against a list of values
+								</li>
+								<li>
+									<strong>Correlated subquery</strong> -
+									References columns from outer query
+								</li>
+							</ul>
+						</div>
+
+						<div class="sql-note">
+							<strong>Subquery in WHERE:</strong> Use to filter
+							based on results from another query. Subquery must
+							return a single value when used with comparison
+							operators.
+						</div>
+
+						<pre><code class="language-sql">
+SELECT * FROM Employees 
+WHERE Salary > (
+    SELECT AVG(Salary) FROM Employees
+);
+    </code></pre>
+
+						<div class="sql-note">
+							<strong>Subquery in FROM:</strong> Use when you need
+							to query from a derived table. Always give the
+							derived table an alias.
+						</div>
+
+						<pre><code class="language-sql">
+SELECT d.DepartmentName, t.AvgSalary 
+FROM (
+    SELECT DepartmentID, AVG(Salary) AS AvgSalary 
+    FROM Employees 
+    GROUP BY DepartmentID
+) t
+INNER JOIN Departments d 
+    ON t.DepartmentID = d.DepartmentID;
+    </code></pre>
+
+						<div class="sql-note">
+							<strong>Subquery with IN:</strong> Use when
+							filtering against a list of values. Subquery must
+							return a single column.
+						</div>
+
+						<pre><code class="language-sql">
+SELECT * FROM Employees
+WHERE DepartmentID IN (
+    SELECT DepartmentID FROM Departments
+    WHERE Location = 'New York'
+);
+    </code></pre>
+
+						<div class="sql-note warning">
+							<strong>Correlated subquery:</strong> Use when
+							subquery references columns from outer query.
+							Executes once for each row in outer query (can be
+							less efficient).
+						</div>
+
+						<pre><code class="language-sql">
+SELECT e.Name, e.Salary
+FROM Employees e
+WHERE e.Salary > (
+    SELECT AVG(Salary) FROM Employees
+    WHERE DepartmentID = e.DepartmentID
+);
+    </code></pre>
+					</details>
+
+					<details id="common-use-cases">
+						<summary>🚀 Common Use Cases</summary>
+						<pre><code class="language-sql">
+-- Data Analysis: Finding trends in sales
+SELECT YEAR(OrderDate) AS Year, MONTH(OrderDate) AS Month,
+       SUM(TotalAmount) AS MonthlySales
+FROM Orders
+GROUP BY YEAR(OrderDate), MONTH(OrderDate)
+ORDER BY Year, Month;
+
+-- Reporting: Customer purchase history
+SELECT c.CustomerName, 
+       COUNT(o.OrderID) AS TotalOrders,
+       SUM(o.TotalAmount) AS TotalSpent,
+       MAX(o.OrderDate) AS LastOrderDate
+FROM Customers c
+LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
+GROUP BY c.CustomerName
+ORDER BY TotalSpent DESC;
+
+-- Data Integration: Merging data from multiple sources
+WITH ProductData AS (
+    SELECT ProductID, ProductName, Price FROM LocalProducts
+    UNION ALL
+    SELECT ProductID, ProductName, Price FROM ExternalProducts
+)
+SELECT * FROM ProductData;
+    </code></pre>
+					</details>
+
+					<details id="transaction-management">
+						<summary>🔄 Transaction Management</summary>
+						<pre><code class="language-sql">
+-- Basic transaction
+BEGIN TRANSACTION;
+    UPDATE Accounts SET Balance = Balance - 100 WHERE AccountID = 1;
+    UPDATE Accounts SET Balance = Balance + 100 WHERE AccountID = 2;
+    
+    -- Check if any errors occurred
+    IF @@ERROR <> 0
+        ROLLBACK TRANSACTION;
+    ELSE
+        COMMIT TRANSACTION;
+
+-- Using TRY-CATCH for better error handling
+BEGIN TRY
+    BEGIN TRANSACTION;
+        UPDATE Inventory SET Quantity = Quantity - 5 WHERE ProductID = 101;
+        INSERT INTO OrderDetails(OrderID, ProductID, Quantity) VALUES(1001, 101, 5);
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    -- Log error details
+    INSERT INTO ErrorLog(ErrorMessage, ErrorTime)
+    VALUES(ERROR_MESSAGE(), GETDATE());
+END CATCH;
+    </code></pre>
+					</details>
+
+					<details id="performance-tips">
+						<summary>💡 Performance Optimization Tips</summary>
+						<pre><code class="language-sql">
+-- Use appropriate indexes
+CREATE INDEX idx_employee_department ON Employees(DepartmentID);
+
+-- Avoid SELECT *
+SELECT EmployeeID, Name, DepartmentID FROM Employees
+WHERE DepartmentID = 5;
+
+-- Use EXISTS instead of IN for large datasets
+-- Less efficient with large subqueries
+SELECT * FROM Departments 
+WHERE DepartmentID IN (SELECT DepartmentID FROM Employees WHERE Salary > 50000);
+-- More efficient
+SELECT * FROM Departments d
+WHERE EXISTS (SELECT 1 FROM Employees e 
+              WHERE e.DepartmentID = d.DepartmentID 
+              AND e.Salary > 50000);
+
+-- Use SET operations for complex logic
+SELECT CustomerID FROM PremiumCustomers
+INTERSECT
+SELECT CustomerID FROM ActiveCustomers
+EXCEPT
+SELECT CustomerID FROM CustomersWithComplaints;
+    </code></pre>
+					</details>
+
+					<details id="common-pitfalls">
+						<summary>⚠️ Common Pitfalls</summary>
+						<pre><code class="language-sql">
+-- Pitfall: Not handling NULL values properly
+-- Incorrect (may miss rows where MiddleName is NULL)
+SELECT * FROM Employees WHERE MiddleName != 'John';
+-- Correct
+SELECT * FROM Employees WHERE MiddleName != 'John' OR MiddleName IS NULL;
+
+-- Pitfall: Inefficient wildcard usage
+-- Inefficient (cannot use index)
+SELECT * FROM Products WHERE ProductName LIKE '%Apple%';
+-- More efficient (can use index if available)
+SELECT * FROM Products WHERE ProductName LIKE 'Apple%';
+
+-- Pitfall: Cartesian product with missing JOIN condition
+-- Incorrect (creates cartesian product)
+SELECT e.Name, d.DepartmentName FROM Employees e, Departments d;
+-- Correct
+SELECT e.Name, d.DepartmentName 
+FROM Employees e
+JOIN Departments d ON e.DepartmentID = d.DepartmentID;
+
+-- Pitfall: Not using parameterized queries (SQL injection risk)
+-- Vulnerable to SQL injection
+-- "SELECT * FROM Users WHERE Username = '" + userInput + "'";
+-- Safe (using parameters in your application code)
+-- "SELECT * FROM Users WHERE Username = @Username";
+    </code></pre>
+					</details>
+
+				</div>
+				<!-- End of content-wrapper -->
+			</main>
+			<!-- End of main-content -->
+		</div>
+		<!-- End of main-layout -->
+
+		<!-- Prism.js Scripts -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+	</body>
+</html>
