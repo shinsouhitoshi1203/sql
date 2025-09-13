@@ -1,0 +1,2 @@
+# sql
+Guildlines to use MS-SQL. This is served as cheatsheet. Printable in A4 format. 
